@@ -8,8 +8,10 @@ const HeroSection = ({ eventInfo }) => {
       <div className="bg-gradient-to-b from-slate-200/20 to-slate-800/30">
         <Image
           src={imageUrl}
+          width={500}
+          height={500}
           alt={name}
-          className="h-[450px] mx-auto rounded-lg"
+          className="w-full h-[600px] object-cover mx-auto rounded-lg"
         />
       </div>
 
