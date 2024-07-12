@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import AuthCondition from "../auth/AuthCondition";
 import Logo from "/public/assets/icon.png";
 
 const Navbar = () => {
@@ -19,6 +20,9 @@ const Navbar = () => {
         </div>
 
         <ul className="flex gap-4 text-[#9C9C9C]">
+          <li>
+            <AuthCondition />
+          </li>
           <li>About</li>
           <li>Contact Us</li>
         </ul>
