@@ -1,11 +1,44 @@
-const PaymentForm = () => {
+"use client";
+
+import { addGoingEvent } from "@/app/actions";
+import { useAuth } from "@/app/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+const PaymentForm = ({ eventId }) => {
+  const { auth } = useAuth();
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (auth) {
+      await addGoingEvent(eventId, auth.id);
+      // Redirect to a success page or show a success message
+      router.push("/success");
+    } else {
+      router.push("/login");
+    }
+  };
+
   return (
     <div className="flex items-center justify-center">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg border">
         <h2 className="text-3xl font-bold text-center text-gray-900">
           Payment
         </h2>
-        <form className="mt-6 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="name" className="sr-only">
@@ -15,6 +48,8 @@ const PaymentForm = () => {
                 id="name"
                 name="name"
                 type="text"
+                value={formData.name}
+                onChange={handleChange}
                 required
                 className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Name"
@@ -28,6 +63,8 @@ const PaymentForm = () => {
                 id="email"
                 name="email"
                 type="email"
+                value={formData.email}
+                onChange={handleChange}
                 autoComplete="email"
                 required
                 className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -35,13 +72,15 @@ const PaymentForm = () => {
               />
             </div>
             <div>
-              <label htmlFor="card-number" className="sr-only">
+              <label htmlFor="cardNumber" className="sr-only">
                 Card Number
               </label>
               <input
-                id="card-number"
-                name="card-number"
+                id="cardNumber"
+                name="cardNumber"
                 type="text"
+                value={formData.cardNumber}
+                onChange={handleChange}
                 required
                 className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Card Number"
@@ -49,13 +88,15 @@ const PaymentForm = () => {
             </div>
             <div className="flex space-x-3">
               <div className="flex-1">
-                <label htmlFor="expiry-date" className="sr-only">
+                <label htmlFor="expiryDate" className="sr-only">
                   Expiry Date
                 </label>
                 <input
-                  id="expiry-date"
-                  name="expiry-date"
+                  id="expiryDate"
+                  name="expiryDate"
                   type="text"
+                  value={formData.expiryDate}
+                  onChange={handleChange}
                   required
                   className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="MM/YY"
@@ -69,6 +110,8 @@ const PaymentForm = () => {
                   id="cvv"
                   name="cvv"
                   type="text"
+                  value={formData.cvv}
+                  onChange={handleChange}
                   required
                   className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="CVV"
